@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Dashboard - PostIt</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>PostIt - Athlete</h1>
+                </div>
+                <div class="nav-links">
+                    <span id="userName"></span>
+                    <button id="logoutBtn" class="btn-logout" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin-left: 1rem;">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Athlete Dashboard</h2>
+                <p>Welcome to your training dashboard!</p>
+                <div style="background: white; padding: 2rem; border-radius: 8px; margin-top: 2rem;">
+                    <p style="color: #7f8c8d; font-style: italic;">This page will display your training programs, progress, and feedback.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PostIt. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check authentication
+        const authToken = localStorage.getItem('auth_token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!authToken || !user.id) {
+            window.location.href = 'login.html';
+        }
+
+        // Check if user has athlete role
+        if (user.role !== 'athlete') {
+            window.location.href = 'role-selection.html';
+        }
+
+        // Display user name
+        document.getElementById('userName').textContent = user.name;
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            try {
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Accept': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

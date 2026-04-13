@@ -72,4 +72,20 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function setRole(Request $request)
+    {
+        $request->validate([
+            'role' => 'required|in:athlete,coach',
+        ]);
+
+        $user = $request->user();
+        $user->role = $request->role;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Role updated successfully',
+            'user' => $user,
+        ]);
+    }
 }

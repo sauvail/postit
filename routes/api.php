@@ -12,6 +12,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/user/role', [AuthController::class, 'setRole']);
 
     // Admin routes
     Route::middleware('admin')->prefix('admin')->group(function () {
