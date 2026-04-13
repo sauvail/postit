@@ -29,9 +29,15 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             localStorage.setItem('auth_token', data.access_token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            // Redirect to dashboard or home
-            alert('Login successful! Welcome back.');
-            window.location.href = 'index.html';
+            // Redirect based on role
+            if (data.user.role === 'coach') {
+                window.location.href = 'coach-dashboard.html';
+            } else if (data.user.role === 'athlete') {
+                window.location.href = 'athlete-dashboard.html';
+            } else {
+                // No role selected yet
+                window.location.href = 'role-selection.html';
+            }
         } else {
             // Handle login errors
             const errorMessage = data.errors?.email?.[0] || data.message || 'Invalid credentials.';

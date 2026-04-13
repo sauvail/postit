@@ -51,9 +51,8 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('auth_token', data.access_token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            // Redirect to dashboard or home
-            alert('Account created successfully! Welcome to PostIt.');
-            window.location.href = 'index.html';
+            // Redirect to role selection
+            window.location.href = 'role-selection.html';
         } else {
             // Handle validation errors
             if (data.errors) {
