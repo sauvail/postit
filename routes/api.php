@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/user/role', [AuthController::class, 'setRole']);
 
-    // Exercise routes (accessible to coaches)
+    // Exercise routes (require authentication)
     Route::apiResource('exercises', ExerciseController::class);
     Route::post('exercises/{exercise}/duplicate', [ExerciseController::class, 'duplicate']);
 

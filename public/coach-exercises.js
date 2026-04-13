@@ -18,12 +18,12 @@ function renderBodyParts() {
     // Remove existing tags (keep the input)
     Array.from(wrapper.querySelectorAll('.tag-removable')).forEach(el => el.remove());
 
-    bodyPartsValue.forEach((bp, idx) => {
+    bodyPartsValue.forEach((bp) => {
         const tag = document.createElement('span');
         tag.className = 'tag-removable';
         tag.innerHTML = `${escHtml(bp)}<button type="button" aria-label="Remove ${escHtml(bp)}">&times;</button>`;
         tag.querySelector('button').addEventListener('click', () => {
-            bodyPartsValue.splice(idx, 1);
+            bodyPartsValue = bodyPartsValue.filter(v => v !== bp);
             renderBodyParts();
         });
         wrapper.insertBefore(tag, input);
