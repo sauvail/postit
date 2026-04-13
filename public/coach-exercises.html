@@ -6,6 +6,254 @@
     <title>Exercises - PostIt</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="coach-styles.css">
+    <style>
+        /* ---- Exercises page specific styles ---- */
+        .exercises-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .exercises-toolbar input[type="search"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .exercises-table-wrapper {
+            overflow-x: auto;
+        }
+        .exercises-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .exercises-table th,
+        .exercises-table td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        .exercises-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        .exercises-table tr:hover {
+            background: #f9f9f9;
+        }
+        .tag {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #2980b9;
+            border-radius: 4px;
+            padding: 0.15rem 0.45rem;
+            font-size: 0.8rem;
+            margin: 0.1rem;
+        }
+        .tag-variation {
+            background: #eafaf1;
+            color: #27ae60;
+        }
+        .tag-type {
+            background: #fef9e7;
+            color: #d68910;
+        }
+        .actions-cell {
+            white-space: nowrap;
+        }
+        .btn-sm {
+            padding: 0.3rem 0.65rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+            transition: opacity 0.2s;
+        }
+        .btn-sm:hover { opacity: 0.85; }
+        .btn-edit-ex  { background: #3498db; color: white; }
+        .btn-duplicate { background: #9b59b6; color: white; }
+        .btn-delete-ex { background: #e74c3c; color: white; }
+
+        /* ---- Modal ---- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 680px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-header h3 { margin: 0; }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-group textarea { resize: vertical; min-height: 70px; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .variations-section { margin-top: 1.5rem; }
+        .variations-section h4 {
+            margin-bottom: 0.75rem;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        .variation-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 0.85rem;
+            margin-bottom: 0.6rem;
+            background: #fafafa;
+            position: relative;
+        }
+        .variation-item .remove-variation {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .btn-add-variation {
+            background: #eafaf1;
+            color: #27ae60;
+            border: 1px dashed #27ae60;
+            border-radius: 4px;
+            padding: 0.45rem 1rem;
+            cursor: pointer;
+            font-size: 0.88rem;
+            width: 100%;
+            margin-top: 0.25rem;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .btn-cancel {
+            background: #ecf0f1;
+            color: #666;
+            border: none;
+            padding: 0.55rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-save {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.55rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .error-msg {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #95a5a6;
+        }
+        /* body-parts multi-select as tag input */
+        .body-parts-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.4rem 0.5rem;
+            cursor: text;
+            min-height: 38px;
+            align-items: center;
+        }
+        .body-parts-input-wrapper .tag-removable {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: #e8f4fd;
+            color: #2980b9;
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            font-size: 0.82rem;
+        }
+        .tag-removable button {
+            background: none;
+            border: none;
+            color: #2980b9;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+        .body-parts-input-wrapper input {
+            border: none !important;
+            outline: none !important;
+            padding: 0.1rem !important;
+            flex: 1;
+            min-width: 80px;
+            font-size: 0.88rem;
+        }
+        /* Confirm delete */
+        .confirm-modal { max-width: 400px; }
+        .confirm-modal p { margin: 0.5rem 0 1.5rem; }
+    </style>
 </head>
 <body>
     <header>
@@ -46,17 +294,29 @@
             </div>
 
             <div class="dashboard-card">
-                <p class="placeholder-text">This page will allow you to manage your exercise library.</p>
-                <p class="placeholder-text">Features to be implemented:</p>
-                <ul>
-                    <li>View all exercises</li>
-                    <li>Create new exercises</li>
-                    <li>Edit exercise details</li>
-                    <li>Add exercise variations</li>
-                    <li>Upload exercise videos/images</li>
-                    <li>Organize exercises by category</li>
-                    <li>Search and filter exercises</li>
-                </ul>
+                <div class="exercises-toolbar">
+                    <input type="search" id="searchInput" placeholder="Search exercises…" aria-label="Search exercises">
+                    <button class="btn-primary" id="btnCreate">+ New Exercise</button>
+                </div>
+
+                <div class="exercises-table-wrapper">
+                    <table class="exercises-table" id="exercisesTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Equipment</th>
+                                <th>Body Parts</th>
+                                <th>Type</th>
+                                <th>Variations</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercisesBody">
+                            <tr><td colspan="7" class="empty-state">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
@@ -67,6 +327,82 @@
         </div>
     </footer>
 
+    <!-- Create / Edit Modal -->
+    <div class="modal-overlay" id="exerciseModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">New Exercise</h3>
+                <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <form id="exerciseForm" novalidate>
+                <input type="hidden" id="exerciseId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fieldName">Name *</label>
+                        <input type="text" id="fieldName" placeholder="e.g. Back Squat" required>
+                        <div class="error-msg" id="errName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldEquipment">Equipment</label>
+                        <input type="text" id="fieldEquipment" placeholder="e.g. Barbell">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fieldType">Type</label>
+                        <select id="fieldType">
+                            <option value="">— select —</option>
+                            <option value="weight">Weight</option>
+                            <option value="time">Time</option>
+                            <option value="reps">Reps</option>
+                            <option value="distance">Distance</option>
+                            <option value="bodyweight">Bodyweight</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Body Parts</label>
+                        <div class="body-parts-input-wrapper" id="bodyPartsWrapper">
+                            <input type="text" id="bodyPartsInput" placeholder="Type and press Enter…" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fieldDescription">Description</label>
+                    <textarea id="fieldDescription" placeholder="Describe the exercise…"></textarea>
+                </div>
+
+                <div class="variations-section">
+                    <h4>Variations</h4>
+                    <div id="variationsContainer"></div>
+                    <button type="button" class="btn-add-variation" id="btnAddVariation">+ Add Variation</button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="btnModalCancel">Cancel</button>
+                    <button type="submit" class="btn-save" id="btnSave">Save Exercise</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true">
+        <div class="modal confirm-modal">
+            <div class="modal-header">
+                <h3>Delete Exercise</h3>
+                <button class="modal-close" id="confirmClose" aria-label="Close">&times;</button>
+            </div>
+            <p>Are you sure you want to delete <strong id="confirmName"></strong>? This action cannot be undone.</p>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="btnConfirmCancel">Cancel</button>
+                <button class="btn-delete-ex btn-sm" id="btnConfirmDelete" style="padding:0.55rem 1.2rem;font-size:1rem;">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="coach-base.js"></script>
+    <script src="coach-exercises.js"></script>
 </body>
 </html>
+
