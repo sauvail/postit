@@ -1,58 +1,186 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PostIt - Strength Sport Coaching App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based strength sport coaching platform with user management, payment processing, statistics, graphs, and exercise tracking capabilities.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend**: PHP 8.3 + Laravel 13
+- **Authentication**: Laravel Sanctum (API tokens)
+- **Database**: SQLite (default, configurable to MySQL/PostgreSQL)
+- **Frontend**: HTML/CSS/JavaScript (static files in `/public`)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Current Implementation
 
-## Learning Laravel
+- ✅ Landing page
+- ✅ Login page
+- ✅ RESTful API with authentication
+- ✅ Admin back office interface
+- ✅ User management system
+- ✅ Role-based access control (Admin/User)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Planned Features
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Payment processing integration
+- Performance statistics and analytics
+- Interactive graphs and charts
+- Exercise library and tracking
+- Workout programming
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Installation
 
-## Agentic Development
+1. **Install Dependencies**
+   ```bash
+   composer install
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+3. **Database Setup**
+   ```bash
+   php artisan migrate
+   ```
+
+4. **Start Development Server**
+   ```bash
+   php artisan serve
+   ```
+
+   The application will be available at `http://localhost:8000`
+
+## API Endpoints
+
+### Public Routes
+
+- `POST /api/register` - Register new user
+- `POST /api/login` - Login user
+
+### Protected Routes (require authentication)
+
+- `POST /api/logout` - Logout user
+- `GET /api/user` - Get authenticated user
+
+### Admin Routes (require admin privileges)
+
+- `GET /api/admin/users` - List all users
+- `POST /api/admin/users` - Create new user
+- `GET /api/admin/users/{id}` - Get user details
+- `PUT /api/admin/users/{id}` - Update user
+- `DELETE /api/admin/users/{id}` - Delete user
+
+## Admin Panel
+
+Access the admin panel at:
+
+- Dashboard: `http://localhost:8000/admin`
+- User Management: `http://localhost:8000/admin/users`
+
+## Authentication
+
+The API uses Laravel Sanctum for token-based authentication.
+
+### Login Example
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password"}'
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Response:
+```json
+{
+  "access_token": "1|xxxxxxxxxxxxxx",
+  "token_type": "Bearer",
+  "user": {
+    "id": 1,
+    "name": "User Name",
+    "email": "user@example.com",
+    "is_admin": false
+  }
+}
+```
 
-## Contributing
+### Making Authenticated Requests
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+curl -X GET http://localhost:8000/api/user \
+  -H "Authorization: Bearer 1|xxxxxxxxxxxxxx"
+```
 
-## Code of Conduct
+## Database Schema
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Users Table
 
-## Security Vulnerabilities
+- `id` - Primary key
+- `name` - User's full name
+- `email` - Unique email address
+- `password` - Hashed password
+- `is_admin` - Boolean flag for admin access
+- `email_verified_at` - Email verification timestamp
+- `remember_token` - Remember me token
+- `created_at` - Creation timestamp
+- `updated_at` - Last update timestamp
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Development
+
+### Running Tests
+
+```bash
+php artisan test
+```
+
+### Code Style
+
+```bash
+./vendor/bin/pint
+```
+
+## Project Structure
+
+```
+.
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/
+│   │   │   │   └── AuthController.php
+│   │   │   └── Admin/
+│   │   │       ├── DashboardController.php
+│   │   │       └── UserController.php
+│   │   └── Middleware/
+│   │       └── AdminMiddleware.php
+│   └── Models/
+│       └── User.php
+├── database/
+│   └── migrations/
+├── public/
+│   ├── index.html (Landing page)
+│   ├── login.html (Login page)
+│   └── styles.css
+├── resources/
+│   └── views/
+│       └── admin/
+│           ├── dashboard.blade.php
+│           └── users.blade.php
+└── routes/
+    ├── api.php (API routes)
+    └── web.php (Web routes)
+```
+
+## Security
+
+- Passwords are hashed using bcrypt
+- API authentication via Sanctum tokens
+- Admin routes protected by middleware
+- CSRF protection enabled for web routes
+- SQL injection prevention via Eloquent ORM
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proprietary - All rights reserved
