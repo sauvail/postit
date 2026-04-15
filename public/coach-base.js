@@ -1,6 +1,6 @@
 // Check authentication
-const authToken = localStorage.getItem('auth_token');
-const user = JSON.parse(localStorage.getItem('user') || '{}');
+var authToken = localStorage.getItem('auth_token');
+var user = JSON.parse(localStorage.getItem('user') || '{}');
 
 if (!authToken || !user.id) {
     window.location.href = 'login.html';
