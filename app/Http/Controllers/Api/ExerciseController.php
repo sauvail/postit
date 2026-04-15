@@ -48,7 +48,7 @@ class ExerciseController extends Controller
     public function update(Request $request, Exercise $exercise)
     {
         $request->validate([
-            'name'        => ['string', 'max:255', Rule::unique('exercises', 'name')->ignore($exercise->id)],
+            'name'        => ['required', 'string', 'max:255', Rule::unique('exercises', 'name')->ignore($exercise->id)],
             'equipment'   => 'nullable|string|max:255',
             'body_parts'  => 'nullable|array',
             'body_parts.*' => 'string|max:100',
