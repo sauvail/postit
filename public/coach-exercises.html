@@ -344,7 +344,22 @@
                     </div>
                     <div class="form-group">
                         <label for="fieldEquipment">Equipment</label>
-                        <input type="text" id="fieldEquipment" placeholder="e.g. Barbell">
+                        <input type="text" id="fieldEquipment" placeholder="e.g. Barbell" list="equipmentList" autocomplete="off">
+                        <datalist id="equipmentList">
+                            <option value="Barbell">
+                            <option value="Dumbbell">
+                            <option value="Kettlebell">
+                            <option value="Machine">
+                            <option value="Cable">
+                            <option value="Resistance Band">
+                            <option value="Bodyweight">
+                            <option value="Medicine Ball">
+                            <option value="TRX/Suspension">
+                            <option value="Pull-up Bar">
+                            <option value="Bench">
+                            <option value="Box/Step">
+                            <option value="Other">
+                        </datalist>
                     </div>
                 </div>
                 <div class="form-row">
@@ -363,8 +378,30 @@
                     <div class="form-group">
                         <label>Body Parts</label>
                         <div class="body-parts-input-wrapper" id="bodyPartsWrapper">
-                            <input type="text" id="bodyPartsInput" placeholder="Type and press Enter…" autocomplete="off">
+                            <input type="text" id="bodyPartsInput" placeholder="Type and press Enter…" autocomplete="off" list="bodyPartsList">
                         </div>
+                        <datalist id="bodyPartsList">
+                            <option value="Chest">
+                            <option value="Back">
+                            <option value="Shoulders">
+                            <option value="Biceps">
+                            <option value="Triceps">
+                            <option value="Forearms">
+                            <option value="Abs">
+                            <option value="Obliques">
+                            <option value="Lower Back">
+                            <option value="Quadriceps">
+                            <option value="Hamstrings">
+                            <option value="Glutes">
+                            <option value="Calves">
+                            <option value="Hip Flexors">
+                            <option value="Adductors">
+                            <option value="Abductors">
+                            <option value="Full Body">
+                            <option value="Core">
+                            <option value="Legs">
+                            <option value="Arms">
+                        </datalist>
                     </div>
                 </div>
                 <div class="form-group">
